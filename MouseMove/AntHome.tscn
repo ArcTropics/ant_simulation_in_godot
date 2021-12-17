@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[sub_resource type="Gradient" id=4]
+offsets = PoolRealArray( 0.0765027, 0.874317 )
+colors = PoolColorArray( 0.230469, 0.0918274, 0, 1, 0.40625, 0.0856934, 0, 1 )
+
+[sub_resource type="GradientTexture" id=5]
+gradient = SubResource( 4 )
+
+[node name="AntHome" type="Sprite" groups=["Home"]]
+position = Vector2( 139, 483 )
+scale = Vector2( 0.112549, 181 )
+texture = SubResource( 5 )

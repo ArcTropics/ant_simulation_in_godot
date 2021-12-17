@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://MouseMove/Ant.tscn" type="PackedScene" id=1]
+
+[sub_resource type="Gradient" id=2]
+colors = PoolColorArray( 0.722656, 0.722656, 0.722656, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+
+[node name="Main Scene" type="Node2D"]
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 507.5, 312.75 )
+rotation = -1.57079
+scale = Vector2( 0.317871, 1088.5 )
+texture = SubResource( 3 )
+
+[node name="Ant" parent="." instance=ExtResource( 1 )]
+position = Vector2( 807, 241 )
+move_speed = 4.0

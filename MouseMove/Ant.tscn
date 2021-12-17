@@ -1,0 +1,66 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://images/ant_walk/Ant_3.png" type="Texture" id=1]
+[ext_resource path="res://images/ant_walk/Ant_1.png" type="Texture" id=2]
+[ext_resource path="res://images/ant_walk/Ant_2.png" type="Texture" id=3]
+[ext_resource path="res://MouseMove/Ant_AI.gd" type="Script" id=4]
+[ext_resource path="res://addons/behavior_tree/nodes/composites/sequence.gd" type="Script" id=5]
+[ext_resource path="res://addons/behavior_tree/nodes/bt_root.gd" type="Script" id=6]
+[ext_resource path="res://MouseMove/IsAtTarget.gd" type="Script" id=7]
+[ext_resource path="res://addons/behavior_tree/nodes/decorators/inverter.gd" type="Script" id=9]
+[ext_resource path="res://MouseMove/MoveToTarget.gd" type="Script" id=10]
+[ext_resource path="res://MouseMove/IsMouseClose.gd" type="Script" id=11]
+[ext_resource path="res://MouseMove/LookAtTarget.gd" type="Script" id=12]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 1 ) ],
+"loop": true,
+"name": "walk",
+"speed": 12.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=2]
+height = 28.0
+
+[node name="Ant" type="KinematicBody2D"]
+script = ExtResource( 4 )
+animSprite = NodePath("AnimatedSprite")
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+rotation = 1.57079
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 1 )
+animation = "idle"
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -1, 0 )
+rotation = 1.57079
+shape = SubResource( 2 )
+
+[node name="BehaviorTreeRoot" type="Node" parent="."]
+script = ExtResource( 6 )
+
+[node name="SequenceComposite" type="Node" parent="BehaviorTreeRoot"]
+script = ExtResource( 5 )
+
+[node name="ConditionLeaf" type="Node" parent="BehaviorTreeRoot/SequenceComposite"]
+script = ExtResource( 11 )
+
+[node name="ActionLeaf" type="Node" parent="BehaviorTreeRoot/SequenceComposite"]
+script = ExtResource( 12 )
+
+[node name="InverterDecorator" type="Node" parent="BehaviorTreeRoot/SequenceComposite"]
+script = ExtResource( 9 )
+
+[node name="ConditionLeaf" type="Node" parent="BehaviorTreeRoot/SequenceComposite/InverterDecorator"]
+script = ExtResource( 7 )
+
+[node name="ActionLeaf2" type="Node" parent="BehaviorTreeRoot/SequenceComposite"]
+script = ExtResource( 10 )
