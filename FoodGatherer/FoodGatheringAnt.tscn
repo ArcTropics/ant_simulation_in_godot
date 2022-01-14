@@ -1,0 +1,119 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://addons/behavior_tree/nodes/bt_root.gd" type="Script" id=1]
+[ext_resource path="res://images/ant_walk/Ant_2.png" type="Texture" id=2]
+[ext_resource path="res://images/ant_walk/Ant_3.png" type="Texture" id=3]
+[ext_resource path="res://images/ant_walk/Ant_1.png" type="Texture" id=4]
+[ext_resource path="res://FoodGatherer/FoodGatheringAnt_AI.gd" type="Script" id=5]
+[ext_resource path="res://Wanderer/MoveForward.gd" type="Script" id=6]
+[ext_resource path="res://addons/behavior_tree/nodes/composites/sequence.gd" type="Script" id=7]
+[ext_resource path="res://Wanderer/RotateRandom.gd" type="Script" id=8]
+[ext_resource path="res://addons/behavior_tree/nodes/composites/selector.gd" type="Script" id=9]
+[ext_resource path="res://FoodGatherer/RotateTillClear.gd" type="Script" id=10]
+[ext_resource path="res://FoodGatherer/CheckForColisions.gd" type="Script" id=11]
+[ext_resource path="res://FoodGatherer/RotateToFood.gd" type="Script" id=14]
+[ext_resource path="res://FoodGatherer/IsNearFood.gd" type="Script" id=15]
+[ext_resource path="res://FoodGatherer/IsGoingToFood.gd" type="Script" id=16]
+[ext_resource path="res://addons/behavior_tree/nodes/decorators/inverter.gd" type="Script" id=17]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 2 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 2 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "walk",
+"speed": 12.0
+} ]
+
+[sub_resource type="CircleShape2D" id=3]
+radius = 80.0
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 8.00004
+height = 12.0
+
+[node name="FoodGathererAnt" type="KinematicBody2D" groups=["ant"]]
+script = ExtResource( 5 )
+ray_collider = NodePath("RayCast2D Collision")
+ray_collider_l = NodePath("RayCast2D Collision L")
+ray_collider_r = NodePath("RayCast2D Collision R")
+animSprite = NodePath("AnimatedSprite")
+move_speed = 140.0
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+rotation = 1.57079
+scale = Vector2( 0.278531, 0.278531 )
+frames = SubResource( 1 )
+animation = "idle"
+playing = true
+
+[node name="Food Detector" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Food Detector"]
+position = Vector2( 80, 0 )
+shape = SubResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -1, 0 )
+rotation = 1.57079
+shape = SubResource( 2 )
+
+[node name="RayCast2D Collision" type="RayCast2D" parent="."]
+enabled = true
+cast_to = Vector2( 25, 0 )
+
+[node name="RayCast2D Collision R" type="RayCast2D" parent="."]
+enabled = true
+cast_to = Vector2( 18, 18 )
+
+[node name="RayCast2D Collision L" type="RayCast2D" parent="."]
+enabled = true
+cast_to = Vector2( 18, -18 )
+
+[node name="BehaviorTreeRoot" type="Node" parent="."]
+script = ExtResource( 1 )
+
+[node name="Main Sequene" type="Node" parent="BehaviorTreeRoot"]
+script = ExtResource( 7 )
+
+[node name="Sel 01" type="Node" parent="BehaviorTreeRoot/Main Sequene"]
+script = ExtResource( 9 )
+
+[node name="Seq Go to Food" type="Node" parent="BehaviorTreeRoot/Main Sequene/Sel 01"]
+script = ExtResource( 7 )
+
+[node name="Is Going to Food" type="Node" parent="BehaviorTreeRoot/Main Sequene/Sel 01/Seq Go to Food"]
+script = ExtResource( 15 )
+
+[node name="Rotate Towards Food" type="Node" parent="BehaviorTreeRoot/Main Sequene/Sel 01/Seq Go to Food"]
+script = ExtResource( 14 )
+
+[node name="Seq Wander" type="Node" parent="BehaviorTreeRoot/Main Sequene/Sel 01"]
+script = ExtResource( 7 )
+
+[node name="InverterDecorator2" type="Node" parent="BehaviorTreeRoot/Main Sequene/Sel 01/Seq Wander"]
+script = ExtResource( 17 )
+
+[node name="Is Near Food\?" type="Node" parent="BehaviorTreeRoot/Main Sequene/Sel 01/Seq Wander/InverterDecorator2"]
+script = ExtResource( 16 )
+
+[node name="RotateRandom" type="Node" parent="BehaviorTreeRoot/Main Sequene/Sel 01/Seq Wander"]
+script = ExtResource( 8 )
+
+[node name="Seq Task 00" type="Node" parent="BehaviorTreeRoot/Main Sequene"]
+script = ExtResource( 7 )
+
+[node name="MoveForward" type="Node" parent="BehaviorTreeRoot/Main Sequene/Seq Task 00"]
+script = ExtResource( 6 )
+
+[node name="Check For Colisions" type="Node" parent="BehaviorTreeRoot/Main Sequene/Seq Task 00"]
+script = ExtResource( 11 )
+
+[node name="Rotate Till Clear" type="Node" parent="BehaviorTreeRoot/Main Sequene/Seq Task 00"]
+script = ExtResource( 10 )
+
+[connection signal="area_entered" from="Food Detector" to="." method="_on_Food_Detector_area_entered"]

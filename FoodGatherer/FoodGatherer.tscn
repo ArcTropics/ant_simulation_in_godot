@@ -1,0 +1,80 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Objects/Food.tscn" type="PackedScene" id=2]
+[ext_resource path="res://FoodGatherer/AntBirthManager.gd" type="Script" id=5]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 1005.63, 31.5 )
+
+[node name="FoodGatherer" type="Node2D"]
+
+[node name="Background Color" type="ColorRect" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Boundary Walls" type="StaticBody2D" parent="." groups=["obstacles"]]
+position = Vector2( 0, -6 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Boundary Walls"]
+position = Vector2( 929, -25 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Boundary Walls"]
+position = Vector2( 961.375, 1119 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Boundary Walls"]
+position = Vector2( -23, 496 )
+rotation = 1.57079
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Boundary Walls"]
+position = Vector2( 1946, 673 )
+rotation = 1.57079
+shape = SubResource( 1 )
+
+[node name="Food" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1435, 838 )
+
+[node name="Food2" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1141, 728 )
+
+[node name="Food3" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1260, 375 )
+
+[node name="Food4" parent="." instance=ExtResource( 2 )]
+position = Vector2( 924, 242 )
+
+[node name="Food5" parent="." instance=ExtResource( 2 )]
+position = Vector2( 855, 930 )
+
+[node name="Food6" parent="." instance=ExtResource( 2 )]
+position = Vector2( 246, 325 )
+
+[node name="Food7" parent="." instance=ExtResource( 2 )]
+position = Vector2( 283, 902 )
+
+[node name="Food8" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1748, 1035 )
+
+[node name="Food9" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1716, 298 )
+
+[node name="Food10" parent="." instance=ExtResource( 2 )]
+position = Vector2( 631, 404 )
+
+[node name="Food11" parent="." instance=ExtResource( 2 )]
+position = Vector2( 787, 697 )
+
+[node name="Food12" parent="." instance=ExtResource( 2 )]
+position = Vector2( 399, 171 )
+
+[node name="Ant Birth Manager" type="Node" parent="."]
+script = ExtResource( 5 )
+max_ants = 100
+
+[node name="Navigation2D" type="Navigation2D" parent="."]
+visible = false

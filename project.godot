@@ -99,8 +99,13 @@ _global_script_class_icons={
 [application]
 
 config/name="Simulation"
-run/main_scene="res://MouseMove/MouseMoveScene.tscn"
+run/main_scene="res://FoodGatherer/FoodGatherer.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/width=1920
+window/size/height=1080
 
 [editor_plugins]
 
